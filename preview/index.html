@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Her Purpose — Personal Development & Purpose Coaching Platform | Live Preview</title>
+<meta name="description" content="Her Purpose: discover yourself, develop your potential, fulfill your purpose. Guided assessment, personalized paths, 1:1 coaching and growth tracking for girls & women 16–40." />
+<meta name="theme-color" content="#6C00FF" />
+<meta property="og:title" content="Her Purpose — Discover Yourself. Develop Your Potential. Fulfill Your Purpose." />
+<meta property="og:description" content="Not a library of courses — a personal growth companion guided by a coach. Assess → goals → paths → coaching → growth." />
+<meta property="og:type" content="website" />
+<link rel="canonical" href="http://localhost:3000/" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Her Purpose","description":"Personal development & purpose coaching platform for girls & women 16–40."}</script>
+<!-- Phase 5: analytics + error tracking stub (wire real IDs at launch; currently no-op, privacy-first) -->
+<script>window.__HP_ANALYTICS__=window.__HP_ANALYTICS__||{track:function(){}};window.addEventListener("error",function(e){if(window.__HP_ANALYTICS__&&window.__HP_ANALYTICS__.onError)window.__HP_ANALYTICS__.onError(e.message);});</script>
+<link rel="stylesheet" href="styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,600;9..144,1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="demo-bar">
+  <span class="pulse"></span>
+  <strong>LIVE PREVIEW · MVP v0.1.0</strong>
+  <span class="demo-sub">Interactive prototype — no login needed. All data is demo & stored in your browser only.</span>
+  <span class="demo-actions">
+    <button class="btn btn-xs btn-ghost" onclick="resetDemo()">Reset demo</button>
+    <button class="btn btn-xs btn-gold" onclick="showView('assessment')">Start Assessment →</button>
+  </span>
+</div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand" onclick="showView('home')">
+      <div class="brand-mark">H</div>
+      <div><div class="brand-name">Her Purpose</div><div class="brand-tag">Discover · Develop · Fulfill</div></div>
+    </div>
+    <nav class="nav-links" id="navLinks">
+      <button data-view="home" class="active" onclick="showView('home')">Home</button>
+      <button data-view="dashboard" onclick="showView('dashboard')">Dashboard</button>
+      <button data-view="paths" onclick="showView('paths')">Paths</button>
+      <button data-view="goals" onclick="showView('goals')">Goals</button>
+      <button data-view="journal" onclick="showView('journal')">Journal</button>
+      <button data-view="saved" onclick="showView('saved')">Saved ♥</button>
+      <button data-view="journey" onclick="showView('journey')">Journey</button>
+      <button data-view="ask" onclick="showView('ask')">Ask Coach</button>
+      <button data-view="book" onclick="showView('book')">Book 1:1</button>
+      <button data-view="store" onclick="showView('store')">Store</button>
+      <button data-view="admin" onclick="showView('admin')">Coach Admin</button>
+    </nav>
+    <div class="nav-right">
+      <button class="icon-btn" onclick="toggleNotifs()" title="Notifications">🔔<span class="badge" id="notifBadge">3</span></button>
+      <div class="avatar" onclick="showView('profile')" title="Profile">S</div>
+      <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+    </div>
+  </div>
+  <div class="notif-panel hidden" id="notifPanel"></div>
+</header>
+
+<main>
+<!-- ============ HOME ============ -->
+<section id="view-home" class="view active">
+  <div class="hero">
+    <div class="hero-copy">
+      <div class="pill">For girls & women 16–40 · Guided by a real coach</div>
+      <h1>Discover Yourself.<br><em>Develop Your Potential.</em><br>Fulfill Your Purpose.</h1>
+      <p class="lede">Not a library of courses — a personal growth companion. Assess where you are, get a personalized path, learn practical skills, talk to your coach, and track real growth.</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary btn-lg" onclick="showView('assessment')">Take the Discovery Assessment</button>
+        <button class="btn btn-outline btn-lg" onclick="showView('dashboard')">See my Dashboard</button>
+      </div>
+      <div class="hero-meta">
+        <div><strong id="statPaths">7</strong><span>growth paths</span></div>
+        <div><strong>5-step</strong><span>guided journey</span></div>
+        <div><strong>1:1</strong><span>coach access</span></div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-head">✨ Your personalized starting point</div>
+      <div class="hero-card-body">
+        <div class="mini-label">BASED ON DEMO ASSESSMENT</div>
+        <div class="rec-row"><span class="rec-dot" style="background:#FF6B00"></span><div><strong>Confidence & Self-Development</strong><small>Recommended · 92% match</small></div><button class="btn btn-xs" onclick="openPath('confidence')">Open →</button></div>
+        <div class="rec-row"><span class="rec-dot" style="background:#FF0A7A"></span><div><strong>Purpose & Vision</strong><small>Recommended · 88% match</small></div><button class="btn btn-xs" onclick="openPath('purpose')">Open →</button></div>
+        <div class="rec-row"><span class="rec-dot" style="background:#00C853"></span><div><strong>Career & Business</strong><small>Suggested · 74% match</small></div><button class="btn btn-xs" onclick="openPath('career')">Open →</button></div>
+        <div class="next-step">🎯 Next step: <strong>Define your first goal</strong> <button class="btn btn-xs btn-primary" onclick="showView('goals')">Add goal</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What you can do here</h2>
+    <p class="sub">Everything connects: Who am I? → What am I capable of? → What is my purpose? → What next? → How am I progressing?</p>
+    <div class="grid-4" id="featureGrid"></div>
+  </div>
+
+  <div class="section how">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><h4>Discover Yourself</h4><p>Complete the guided discovery assessment.</p><button class="btn btn-xs" onclick="showView('assessment')">Start →</button></div>
+      <div class="step"><div class="step-n">2</div><h4>Define Your Goals</h4><p>Turn clarity into goals with action plans.</p><button class="btn btn-xs" onclick="showView('goals')">Set goals →</button></div>
+      <div class="step"><div class="step-n">3</div><h4>Follow Your Path</h4><p>Get 2–3 recommended learning paths.</p><button class="btn btn-xs" onclick="showView('paths')">Explore →</button></div>
+      <div class="step"><div class="step-n">4</div><h4>Get Coaching</h4><p>Ask questions, book 1:1, get feedback.</p><button class="btn btn-xs" onclick="showView('ask')">Ask coach →</button></div>
+      <div class="step"><div class="step-n">5</div><h4>Track Growth</h4><p>Reflect, complete, celebrate milestones.</p><button class="btn btn-xs" onclick="showView('journey')">My journey →</button></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Seven guided growth paths</h2>
+    <div class="grid-3" id="homePaths"></div>
+  </div>
+
+  <div class="cta-band">
+    <h3>Ready to begin? Your coach is already here.</h3>
+    <p>Take 5 minutes. Answer honestly. Get your personalized starting point today.</p>
+    <button class="btn btn-gold btn-lg" onclick="showView('assessment')">Begin Discovery Assessment →</button>
+  </div>
+</section>
+
+<!-- ============ ASSESSMENT ============ -->
+<section id="view-assessment" class="view">
+  <div class="page-head"><h2>Personal Discovery Assessment</h2><p>~5 minutes · Your answers shape your personalized starting point. Be honest — there are no wrong answers.</p>
+  <div class="progress-track"><div class="progress-fill" id="assessFill" style="width:14%"></div></div>
+  <div class="step-count" id="assessCount">Step 1 of 7</div></div>
+  <div class="assess-wrap">
+    <div class="assess-card" id="assessCard"></div>
+    <div class="assess-side">
+      <h4>Why this matters</h4>
+      <ul id="assessWhy"></ul>
+      <div class="tip">💡 <span id="assessTip"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<section id="view-dashboard" class="view">
+  <div class="page-head row"><div><h2 id="dashGreet">Good morning, Sharon 🌸</h2><p id="dashSub">Here's what to focus on next in your growth journey.</p></div>
+  <button class="btn btn-outline" onclick="showView('assessment')">↻ Retake assessment</button></div>
+  <div class="focus-banner" id="focusBanner"></div>
+  <div class="dash-grid">
+    <div class="card span2"><div class="card-head"><h3>🎯 My Goals</h3><button class="btn btn-xs" onclick="showView('goals')">Manage →</button></div><div id="dashGoals"></div></div>
+    <div class="card"><div class="card-head"><h3>🗺 Recommended Paths</h3><button class="btn btn-xs" onclick="showView('paths')">All →</button></div><div id="dashPaths"></div></div>
+    <div class="card"><div class="card-head"><h3>📅 Upcoming Sessions</h3><button class="btn btn-xs" onclick="showView('book')">Book →</button></div><div id="dashSessions"></div></div>
+    <div class="card"><div class="card-head"><h3>💬 Coach Messages</h3><button class="btn btn-xs" onclick="showView('ask')">Ask →</button></div><div id="dashCoach"></div></div>
+    <div class="card"><div class="card-head"><h3>📚 Recommended Resources</h3><button class="btn btn-xs" onclick="showView('store')">Store →</button></div><div id="dashResources"></div></div>
+    <div class="card"><div class="card-head"><h3>🏆 Achievements</h3><button class="btn btn-xs" onclick="showView('journey')">Journey →</button></div><div id="dashAchieve"></div></div>
+    <div class="card"><div class="card-head"><h3>📝 Continue Learning</h3><button class="btn btn-xs" onclick="showView('paths')">Paths →</button></div><div id="dashContinue"></div></div>
+    <div class="card"><div class="card-head"><h3>💡 Suggested Next Steps</h3></div><div id="dashNext"></div></div>
+  </div>
+</section>
+
+<!-- ============ PATHS ============ -->
+<section id="view-paths" class="view">
+  <div class="page-head"><h2>Personalized Learning Paths</h2><p>Seven structured areas. Your assessment recommends where to start — but you're free to explore all.</p>
+  <div class="filter-row" id="pathFilters"></div></div>
+  <div class="grid-3" id="pathsGrid"></div>
+  <div id="pathDetail" class="hidden"></div>
+</section>
+
+<!-- ============ GOALS ============ -->
+<section id="view-goals" class="view">
+  <div class="page-head row"><div><h2>Goals & Action Plans</h2><p>Define what you want, break it into small actions, track completion, reflect on progress.</p></div>
+  <button class="btn btn-primary" onclick="openGoalModal()">+ New Goal</button></div>
+  <div id="goalsList"></div>
+</section>
+
+<!-- ============ JOURNAL / SAVED / JOURNEY ============ -->
+<section id="view-journal" class="view">
+  <div class="page-head row"><div><h2>Reflection Journal</h2><p>Private to you 🔒. Capture learnings, self-discoveries, challenges and insights. Only you can see this.</p></div>
+  <button class="btn btn-primary" onclick="openJournalModal()">+ New Entry</button></div>
+  <div class="filter-row"><input id="journalSearch" placeholder="Search reflections…" oninput="renderJournal()" style="max-width:280px"></div>
+  <div id="journalList"></div>
+</section>
+
+<section id="view-saved" class="view">
+  <div class="page-head"><h2>Saved Favorites ♥</h2><p>Lessons and resources you saved to return to later.</p></div>
+  <div id="savedList"></div>
+</section>
+
+<section id="view-journey" class="view">
+  <div class="page-head row"><div><h2>My Growth Journey</h2><p>Your whole story — goals, lessons, reflections, sessions, feedback, milestones. Not just "% complete".</p></div>
+  <div><button class="btn btn-outline" onclick="showView('journal')">Journal →</button> <button class="btn btn-outline" onclick="exportJourney()">⬇ Export</button></div></div>
+  <div class="journey-stats" id="journeyStats"></div>
+  <div class="card" style="margin-bottom:12px"><h3 style="margin:0 0 8px">Per-path progress</h3><div id="journeyPaths"></div></div>
+  <div class="filter-row" id="journeyFilters"></div>
+  <div class="timeline" id="journeyTimeline"></div>
+</section>
+
+<!-- ============ ASK COACH ============ -->
+<section id="view-ask" class="view">
+  <div class="page-head"><h2>Ask the Coach</h2><p>Submit any question — strengths, purpose, confidence, career, relationships. Your coach replies with guidance + resources.</p></div>
+  <div class="ask-grid">
+    <div class="card"><h3>New question</h3>
+      <label>Topic</label><select id="askTopic"><option>Confidence</option><option>Purpose & Vision</option><option>Career & Business</option><option>Relationships</option><option>Productivity</option><option>Other</option></select>
+      <label>Your question</label><textarea id="askText" rows="5" placeholder="e.g. I struggle with self-doubt before speaking up at work. How can I build confidence step by step?"></textarea>
+      <button class="btn btn-primary" onclick="submitQuestion()">Send to Coach →</button>
+      <p class="muted">Avg. response time in preview: instant (demo). Real product: within 48h + email notification.</p>
+    </div>
+    <div><h3>History</h3><div id="askHistory"></div></div>
+  </div>
+</section>
+
+<!-- ============ BOOKING ============ -->
+<section id="view-book" class="view">
+  <div class="page-head"><h2>One-on-One Coaching</h2><p>Select a service → pick a time → describe your needs → pay → get confirmation + meeting link.</p></div>
+  <div class="book-steps" id="bookStepsBar"></div>
+  <div id="bookBody"></div>
+  <div class="card" style="margin-top:14px"><div class="card-head"><h3>📅 My bookings</h3><small class="muted">history + reschedule / cancel</small></div><div id="bookingHistory"></div></div>
+</section>
+
+<!-- ============ STORE ============ -->
+<section id="view-store" class="view">
+  <div class="page-head row"><div><h2>Resource & Book Store</h2><p>Books, courses and downloadable resources curated by your coach.</p></div>
+  <button class="btn btn-outline" onclick="showView('purchases')">Purchase history (<span id="purchCount">0</span>)</button></div>
+  <div class="filter-row" id="storeFilters"></div>
+  <div class="grid-3" id="storeGrid"></div>
+</section>
+
+<section id="view-purchases" class="view">
+  <div class="page-head"><h2>Purchase History</h2><p>Everything you've unlocked.</p></div>
+  <div id="purchList"></div>
+</section>
+
+<!-- ============ PROFILE ============ -->
+<section id="view-profile" class="view">
+  <div class="page-head"><h2>My Profile</h2><p>Editable as you grow. Your coach sees this to personalize guidance.</p></div>
+  <div class="profile-grid">
+    <div class="card"><h3>About me</h3><div id="profileForm"></div><button class="btn btn-primary" onclick="saveProfile()">Save changes</button></div>
+    <div class="card"><h3>Assessment summary</h3><div id="profileAssess"></div><button class="btn btn-outline" onclick="showView('assessment')">Retake →</button></div>
+    <div class="card"><h3>Coach feedback for you</h3><div id="profileFeedback"></div></div>
+  </div>
+</section>
+
+<!-- ============ ADMIN ============ -->
+<section id="view-admin" class="view">
+  <div class="page-head"><h2>Coach / Admin Dashboard</h2><p>Manage users, content, coaching, payments, feedback and announcements — no code needed.</p></div>
+  <div class="tabs" id="adminTabs"></div>
+  <div id="adminBody"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <div><strong>Her Purpose</strong> · Discover Yourself. Develop Your Potential. Fulfill Your Purpose.<br><small>Live preview prototype · Demo data only · Safeguarding: ages 16–17 flagged, journals always private.</small></div>
+    <div class="foot-links"><button onclick="showView('home')">Home</button><button onclick="showView('dashboard')">Dashboard</button><button onclick="showView('admin')">Coach Admin</button></div>
+  </div>
+</footer>
+
+<div class="modal-back hidden" id="modalBack"><div class="modal" id="modalBox"></div></div>
+<div class="toast-wrap" id="toasts"></div>
+<script src="app.js"></script>
+</body>
+</html>
