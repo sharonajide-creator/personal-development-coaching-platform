@@ -24,6 +24,11 @@ build/
 out/
 coverage/
 
+# Next.js
+.next/
+next-env.d.ts
+tsconfig.tsbuildinfo
+
 # Python
 __pycache__/
 *.pyc

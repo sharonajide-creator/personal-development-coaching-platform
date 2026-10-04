@@ -1,0 +1,361 @@
+// Prisma schema — MVP v0.1.0 minimum (§4 of IMPLEMENTATION_PLAN.md)
+// DB: local PostgreSQL 16. Better Auth owns user/session/account/verification;
+// we extend `user` with product profile fields.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- Enums ----------
+
+enum Role {
+  USER
+  COACH_ADMIN
+}
+
+enum AgeRange {
+  R16_17
+  R18_24
+  R25_32
+  R33_40
+}
+
+enum PathCategory {
+  SELF_DISCOVERY
+  PURPOSE_VISION
+  CONFIDENCE
+  COMMUNICATION
+  CAREER_BUSINESS
+  LEADERSHIP
+  PRODUCTIVITY
+}
+
+enum LessonType {
+  VIDEO
+  AUDIO
+  ARTICLE
+  EXERCISE
+  WORKSHEET
+  REFLECTION
+  GUIDE
+}
+
+enum ProgressStatus {
+  STARTED
+  COMPLETED
+}
+
+enum QuestionStatus {
+  OPEN
+  ANSWERED
+}
+
+enum GoalStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+}
+
+enum BookingStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum ProductType {
+  BOOK
+  COURSE
+  RESOURCE
+}
+
+enum FeedbackContext {
+  ASSESSMENT
+  EXERCISE
+  CONSULTATION
+}
+
+// ---------- Better Auth models (do not rename fields) ----------
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Product profile (§5.1) — extends Better Auth user
+  role              Role      @default(USER)
+  ageRange          AgeRange?
+  isMinor           Boolean   @default(false)
+  guardianConsent   Boolean   @default(false)
+  interests         String[]  @default([])
+  devGoals          String[]  @default([])
+  improveAreas      String[]  @default([])
+  careerInterests   String[]  @default([])
+  coachingInterests String[]  @default([])
+
+  sessions            Session[]
+  accounts            Account[]
+  assessments         AssessmentResponse[]
+  goals               Goal[]
+  progress            UserProgress[]
+  questions           CoachQuestion[]
+  bookings            Booking[]
+  journal             JournalEntry[]
+  feedback            CoachFeedback[]
+  purchases           Purchase[]
+  notifications       Notification[]
+  milestones          Milestone[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, value])
+}
+
+// ---------- Product models (§4) ----------
+
+model AssessmentResponse {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  strengths           String?
+  interests           String?
+  skills              String?
+  challenges          String?
+  aspirations         String?
+  confidenceScore     Int?
+  goals               String?
+  purposeUnderstanding String?
+  coachingNeeds       String?
+  recommendation      String?
+  completedAt         DateTime @default(now())
+}
+
+model Goal {
+  id         String     @id @default(cuid())
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  timeframe  String?
+  status     GoalStatus @default(ACTIVE)
+  reflections String?
+  progress   Int        @default(0)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  actions    GoalAction[]
+}
+
+model GoalAction {
+  id      String    @id @default(cuid())
+  goalId  String
+  goal    Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  title   String
+  done    Boolean   @default(false)
+  dueDate DateTime?
+}
+
+model LearningPath {
+  id             String       @id @default(cuid())
+  slug           String       @unique
+  title          String
+  category       PathCategory
+  description    String?
+  recommendedFor String?
+  order          Int          @default(0)
+  lessons        Lesson[]
+}
+
+model Lesson {
+  id           String     @id @default(cuid())
+  pathId       String
+  path         LearningPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  type         LessonType
+  title        String
+  body         String?
+  mediaUrl     String?
+  resourceUrls String[]   @default([])
+  order        Int        @default(0)
+  progress     UserProgress[]
+}
+
+model UserProgress {
+  id          String         @id @default(cuid())
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId    String
+  lesson      Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  status      ProgressStatus @default(STARTED)
+  saved       Boolean        @default(false)
+  completedAt DateTime?
+
+  @@unique([userId, lessonId])
+}
+
+model CoachQuestion {
+  id            String         @id @default(cuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question      String
+  response      String?
+  status        QuestionStatus @default(OPEN)
+  resourceLinks String[]       @default([])
+  createdAt     DateTime       @default(now())
+  answeredAt    DateTime?
+}
+
+model CoachingService {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+  price       Int // in minor units (cents)
+  durationMin Int     @default(60)
+  bookings    Booking[]
+}
+
+model AvailabilitySlot {
+  id       String    @id @default(cuid())
+  startAt  DateTime
+  endAt    DateTime
+  isBooked Boolean   @default(false)
+  bookings Booking[]
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  serviceId       String
+  service         CoachingService @relation(fields: [serviceId], references: [id])
+  slotId          String
+  slot            AvailabilitySlot @relation(fields: [slotId], references: [id])
+  needsDescription String?
+  paymentStatus   PaymentStatus @default(PENDING)
+  meetingUrl      String?
+  feedback        String?
+  status          BookingStatus @default(PENDING_PAYMENT)
+  createdAt       DateTime      @default(now())
+  purchases       Purchase[]
+}
+
+model JournalEntry {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  learnings     String?
+  selfDiscovery String?
+  challenges    String?
+  insights      String?
+  progressNote  String?
+  coachQuestion String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model CoachFeedback {
+  id           String          @id @default(cuid())
+  userId       String
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contextType  FeedbackContext
+  observations String?
+  improvements String?
+  resources    String?
+  nextSteps    String?
+  encouragement String?
+  createdAt    DateTime        @default(now())
+}
+
+model Product {
+  id       String      @id @default(cuid())
+  type     ProductType
+  title    String
+  price    Int // minor units
+  fileUrl  String?
+  category String?
+  stock    Int?
+  purchases Purchase[]
+}
+
+model Purchase {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId       String?
+  product         Product?      @relation(fields: [productId], references: [id])
+  bookingId       String?
+  booking         Booking?      @relation(fields: [bookingId], references: [id])
+  stripeSessionId String?       @unique
+  amount          Int
+  status          PaymentStatus @default(PENDING)
+  createdAt       DateTime      @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Milestone {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  triggeredBy String?
+  awardedAt   DateTime @default(now())
+}
