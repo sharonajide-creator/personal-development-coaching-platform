@@ -19,6 +19,7 @@ const USER_ROUTES = [
   "/store",
   "/profile",
   "/notifications",
+  "/canvas",
 ];
 
 export function middleware(req: NextRequest) {

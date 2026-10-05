@@ -56,6 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </a>
             <div className="flex items-center gap-3 text-sm">
               <a href="/dashboard" className="hover:underline">Dashboard</a>
+              <a href="/canvas" className="hover:underline">Canvas</a>
               <a href="/paths" className="hover:underline">Paths</a>
               <a href="/store" className="hover:underline">Store</a>
               <a href="/notifications" className="hover:underline">Notifications</a>

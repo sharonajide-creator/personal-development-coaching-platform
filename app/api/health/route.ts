@@ -31,7 +31,7 @@ export async function GET() {
     (counts?.services ?? 0) >= 1;
 
   return NextResponse.json(
-    { ok: phase5Ready, env, db, counts, launch: "v0.1.0-phase5" },
+    { ok: phase5Ready, env, db, counts, launch: "v0.1.0-phase5", groq: !!process.env.GROQ_API_KEY },
     { status: phase5Ready ? 200 : 503 }
   );
 }
