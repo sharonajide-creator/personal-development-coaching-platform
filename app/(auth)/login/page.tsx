@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const searchParams = useSearchParams();
+  // Email-first entry: /start sends existing users here with ?email= prefilled.
+  const [email, setEmail] = useState(searchParams.get("email") ?? "");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -24,9 +26,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md">
-      <h1 className="font-display text-3xl font-semibold">Welcome back</h1>
-      <p className="mt-1 text-sm text-slate-500">Continue your growth journey.</p>
+    <>
+      <h1 className="font-display text-3xl font-semibold">Welcome back 🌸</h1>
+      <p className="mt-1 text-sm text-slate-500">
+        {searchParams.get("email") ? "Good to see you again — just enter your password to open your platform." : "Continue your growth journey."}
+      </p>
       <form onSubmit={onSubmit} className="mt-6 space-y-4">
         <label className="block">
           <span className="text-sm font-medium">Email</span>
@@ -41,9 +45,19 @@ export default function LoginPage() {
           {loading ? "Logging in…" : "Log in"}
         </button>
         <p className="text-center text-sm text-slate-500">
-          New here? <a href="/register" className="text-brand underline">Create an account</a>
+          New here? <a href="/start" className="text-brand underline">Start your Purpose Journey</a>
         </p>
       </form>
+    </>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <div className="mx-auto max-w-md">
+      <Suspense>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 }

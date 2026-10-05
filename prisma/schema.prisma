@@ -121,6 +121,7 @@ model User {
   purchases           Purchase[]
   notifications       Notification[]
   milestones          Milestone[]
+  mutedTypes          NotificationPreference[]
 }
 
 model Session {
@@ -358,4 +359,15 @@ model Milestone {
   title       String
   triggeredBy String?
   awardedAt   DateTime @default(now())
+}
+
+// Phase 4 — Per-user notification mute preferences (user can mute types).
+model NotificationPreference {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, type])
 }

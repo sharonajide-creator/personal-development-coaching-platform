@@ -58,10 +58,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <a href="/dashboard" className="hover:underline">Dashboard</a>
               <a href="/paths" className="hover:underline">Paths</a>
               <a href="/store" className="hover:underline">Store</a>
+              <a href="/notifications" className="hover:underline">Notifications</a>
               <a href="/admin" className="hover:underline">Coach Admin</a>
               <a href="/login" className="rounded-lg border px-3 py-1.5 hover:bg-slate-50">Log in</a>
-              <a href="/register" className="rounded-lg bg-brand px-3 py-1.5 text-white hover:bg-brand-dark">
-                Get started
+              <a href="/start" className="rounded-lg bg-brand px-3 py-1.5 text-white hover:bg-brand-dark">
+                Start your Purpose Journey
               </a>
             </div>
           </nav>

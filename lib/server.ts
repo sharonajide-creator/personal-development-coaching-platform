@@ -24,3 +24,12 @@ export async function assertGoalOwner(goalId: string, userId: string) {
   if (goal.userId !== userId) return { error: "Access denied.", status: 403 } as const;
   return { goal } as const;
 }
+
+/** Phase 4 — Coach/Admin gate. Returns the user or an error descriptor. */
+export async function requireAdmin() {
+  const user = await getSessionUser();
+  if (!user) return { error: "Unauthorized.", status: 401 } as const;
+  const me = await prisma.user.findUnique({ where: { id: user.id }, select: { id: true, role: true } });
+  if (!me || me.role !== "COACH_ADMIN") return { error: "Admin only.", status: 403 } as const;
+  return { admin: me } as const;
+}

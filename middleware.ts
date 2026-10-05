@@ -18,6 +18,7 @@ const USER_ROUTES = [
   "/bookings",
   "/store",
   "/profile",
+  "/notifications",
 ];
 
 export function middleware(req: NextRequest) {
@@ -29,10 +30,17 @@ export function middleware(req: NextRequest) {
     pathname.startsWith("/admin/") ||
     pathname.startsWith("/api/");
 
-  // Public: marketing, auth, health, SEO files.
+  // Public: marketing, auth, health, SEO files, Stripe webhooks (signed),
+  // and public catalogs (services, slots, store) — buying still needs login.
   if (!needsAuth) return NextResponse.next();
   if (pathname.startsWith("/api/auth")) return NextResponse.next();
   if (pathname.startsWith("/api/health")) return NextResponse.next();
+  if (pathname.startsWith("/api/webhooks/")) return NextResponse.next();
+  if (pathname === "/api/services" || pathname === "/api/slots" || pathname === "/api/store/products") {
+    return NextResponse.next();
+  }
+  // Email-first entry check is public (returns existence only, no profile data).
+  if (pathname === "/api/start/check") return NextResponse.next();
 
   // Better Auth session cookies (v1 default names).
   const hasSession =
