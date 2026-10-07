@@ -1,0 +1,15 @@
+# Netlify deploy config — import the repo and this is picked up automatically.
+# Production database: set DATABASE_URL in the Netlify dashboard (Site settings
+# → Environment variables) to a hosted Postgres (e.g. Neon, DIRECT/non-pooled
+# URL). Never commit database URLs or API keys — .env stays local only.
+
+[build]
+  command = "prisma db push && next build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Keep unsent/static behavior identical to local prod runs.
+[build.environment]
+  NEXT_TELEMETRY_DISABLED = "true"
