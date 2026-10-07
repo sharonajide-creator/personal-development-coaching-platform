@@ -14,6 +14,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Enter a valid email." }, { status: 400 });
   }
   const email = parsed.data.email.trim().toLowerCase();
-  const user = await prisma.user.findUnique({ where: { email }, select: { id: true } });
-  return NextResponse.json({ exists: !!user });
+  try {
+    const user = await prisma.user.findUnique({ where: { email }, select: { id: true } });
+    return NextResponse.json({ exists: !!user });
+  } catch {
+    // Database unreachable (wrong credentials, not migrated, server down).
+    return NextResponse.json(
+      { error: "Can't reach the user database right now — the site owner needs to fix the database connection first." },
+      { status: 503 }
+    );
+  }
 }
