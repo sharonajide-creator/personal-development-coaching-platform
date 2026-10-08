@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 // installing the APK so verification passes on first launch.
 const PACKAGE = "com.herpurpose.app";
 // Fingerprint of her-purpose-release.keystore (public; generated 2026-10-08).
-const SHA256_FINGERPRINT = "2C:95:92:78:FC:E2:A8:1A:28:9C:13:4A:47:BF:21:D1:73:42:D6:7B:AA:70:6E:57:D7:2C:41:01:3C:64:15:B6";
+const SHA256_FINGERPRINT = "08:1D:DA:69:5B:11:3C:09:E9:90:C6:5B:56:55:93:92:37:76:F4:17:6A:6E:87:53:A4:77:93:0A:24:43:00:44";
 
 export async function GET() {
   return NextResponse.json(
