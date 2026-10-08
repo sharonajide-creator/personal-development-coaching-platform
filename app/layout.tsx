@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import InstallPrompt from "@/components/InstallPrompt";
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
@@ -27,6 +29,17 @@ export const metadata: Metadata = {
       "Guided assessment, 7 learning paths, 1:1 coaching and growth tracking for girls & women 16–40.",
   },
   robots: { index: true, follow: true },
+  // PWA: installable app manifest + icons + theme.
+  manifest: "/manifest.webmanifest",
+  themeColor: "#6C00FF",
+  appleWebApp: { capable: true, statusBarStyle: "default", title: "Her Purpose" },
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -74,6 +87,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Her Purpose · Discover Yourself. Develop Your Potential. Fulfill Your Purpose.
           </div>
         </footer>
+        <ServiceWorkerRegister />
+        <InstallPrompt />
       </body>
     </html>
   );
