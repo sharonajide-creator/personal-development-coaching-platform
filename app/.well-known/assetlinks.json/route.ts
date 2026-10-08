@@ -8,7 +8,8 @@ export const dynamic = "force-dynamic";
 // chat). Bubblewrap prints it during `init`; paste it below and redeploy BEFORE
 // installing the APK so verification passes on first launch.
 const PACKAGE = "com.herpurpose.app";
-const SHA256_FINGERPRINT = "REPLACE_WITH_KEY_SHA256_FINGERPRINT";
+// Fingerprint of her-purpose-release.keystore (public; generated 2026-10-08).
+const SHA256_FINGERPRINT = "2C:95:92:78:FC:E2:A8:1A:28:9C:13:4A:47:BF:21:D1:73:42:D6:7B:AA:70:6E:57:D7:2C:41:01:3C:64:15:B6";
 
 export async function GET() {
   return NextResponse.json(
